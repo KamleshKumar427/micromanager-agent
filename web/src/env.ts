@@ -9,7 +9,8 @@ const serverSchema = z.object({
   ALLOW_USER_REGISTRATION: z.boolean(),
   TELEGRAM_DEV_MOCK_SECRET: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional()
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  MONGODB_TLS_INSECURE: z.boolean().optional(),
 });
 
 const resolvedAuthSecret =
@@ -52,5 +53,6 @@ export const env = serverSchema.parse({
   ALLOW_USER_REGISTRATION: allowUserRegistration,
   TELEGRAM_DEV_MOCK_SECRET: process.env.TELEGRAM_DEV_MOCK_SECRET,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  MONGODB_TLS_INSECURE: process.env.MONGODB_TLS_INSECURE === "true" ? true : undefined,
 });

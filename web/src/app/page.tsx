@@ -4,6 +4,7 @@ import { auth, signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CopyMockUrlButton } from "@/features/telegram/components/copy-mock-url-button";
+import { WorkPlanPanel } from "@/features/workplan/components/workplan-panel";
 
 export default async function Home() {
   const session = await auth();
@@ -26,11 +27,14 @@ export default async function Home() {
     telegramMockHref = `/telegram?${mockParams.toString()}`;
   }
 
+  // Prefer NEXTAUTH_URL to keep origin consistent with Auth.js cookies (avoids CSRF issues).
+  const baseOrigin =
+    process.env.NEXTAUTH_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    "https://localhost:3000";
+
   const absoluteMockUrl = telegramMockHref
-    ? new URL(
-        telegramMockHref,
-        process.env.NEXT_PUBLIC_SITE_URL ?? "https://127.0.0.1:3000",
-      ).toString()
+    ? new URL(telegramMockHref, baseOrigin).toString()
     : null;
 
   async function handleSignOut() {
@@ -68,6 +72,7 @@ export default async function Home() {
       </header>
 
       <ChatPanel />
+      <WorkPlanPanel />
     </main>
   );
 }

@@ -16,6 +16,15 @@ const options: MongoClientOptions = {
   w: "majority",
 };
 
+// Opt-in relaxed TLS for local/dev if needed (avoid TLS handshake errors)
+if (process.env.MONGODB_TLS_INSECURE === "true") {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const insecure = options as any;
+  insecure.tls = true;
+  insecure.tlsAllowInvalidCertificates = true;
+  insecure.tlsAllowInvalidHostnames = true;
+}
+
 // Global caching for serverless environments
 declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
